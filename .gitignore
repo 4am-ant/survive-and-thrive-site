@@ -200,3 +200,19 @@ dist
 
 ### Astro ###
 .astro/
+
+# build / runtime outputs
+dist/
+.astro/
+.wrangler/
+.devserver.log
+.devserver.pid
+
+# local env
+.venv/
+node_modules/
+.DS_Store
+
+# your prior backups/outputs
+out/
+out.bak.*

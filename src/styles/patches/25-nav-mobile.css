@@ -1,0 +1,70 @@
+/* Mobile burger button (centred on logo box) */
+.mobile-burger{
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  height:44px;
+  width:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+  z-index:30;
+}
+.mobile-burger:hover{ background: rgba(0,0,0,0.05); }
+
+.burger{display:inline-flex;flex-direction:column;gap:6px}
+.burger span{
+  display:block;
+  width:22px;
+  height:3px;
+  background: var(--brand);
+  border-radius:2px;
+}
+
+/* When nav is hidden (mobile), reduce the space before hero so it matches live better */
+@media (max-width: 767px){
+  .site-nav{
+    margin-bottom: clamp(14px, 3vw, 22px) !important;
+  }
+}
+
+/* Drawer overlay */
+.nav-dim{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.15);
+}
+
+.nav-drawer{
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:min(360px, 85vw);
+  background: var(--panel);
+  padding: 1.25rem 1.25rem 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.nav-close{
+  position:absolute;
+  top:0.75rem;
+  right:0.75rem;
+  height:44px;
+  width:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+}
+.nav-close:hover{ background: rgba(0,0,0,0.05); }
+
+.nav-drawer-list{
+  margin-top:4.5rem;
+  display:flex;
+  flex-direction:column;
+  gap:1.25rem;
+  align-items:center;
+}

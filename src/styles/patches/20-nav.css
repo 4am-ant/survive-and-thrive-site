@@ -1,0 +1,42 @@
+:root{
+  --nav-underline-h:2px;
+}
+
+/* default (narrower): tighter */
+.navlist{
+  gap:clamp(1.0rem, 2vw, 1.5rem) !important;
+}
+
+@media (min-width: 1024px){
+  .navlist{
+    gap:clamp(1.5rem, 3.2vw, 2.5rem) !important;
+  }
+}
+
+.navlink{
+  position:relative;
+  padding-bottom:.65rem;
+  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(12px, 1.25vw, 16px) !important;
+  text-transform:uppercase;
+  letter-spacing:clamp(0.14em, 0.45vw, 0.22em) !important;
+  color:#000;
+  text-decoration:none;
+  transition:color .2s ease;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+}
+.navlink:hover{color:var(--brand);}
+
+.navlink__active-underline{
+  position:absolute;left:0;right:0;bottom:-2px;
+  height:var(--nav-underline-h);
+  background:var(--brand);
+}
+
+/* ensure burger never shows at md+ even if markup changes */
+@media (min-width: 768px){
+  .mobile-burger{ display:none !important; }
+}

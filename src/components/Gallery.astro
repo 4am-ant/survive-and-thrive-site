@@ -1,0 +1,188 @@
+---
+type Item = { src: string; alt?: string };
+const { items = [] as Item[], autoplayMs = 4500 } = Astro.props;
+
+const id = `g_${Math.random().toString(36).slice(2)}`;
+---
+
+<div class="gallery" id={id}>
+  <div class="gallery__track" tabindex="0" aria-label="Photo gallery" data-gallery-track>
+    {items.map((it, i) => (
+      <figure class="gallery__slide" data-i={i}>
+        <img
+          class="gallery__img"
+          src={it.src}
+          alt={it.alt ?? ""}
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+        />
+      </figure>
+    ))}
+  </div>
+
+  <div class="gallery__controls" aria-hidden="false">
+    <button class="gallery__btn" type="button" data-prev>Previous</button>
+
+    <div class="gallery__dots" aria-hidden="true">
+      {items.map((_, i) => (
+        <button class="gallery__dot" type="button" data-dot={i} aria-current={i === 0 ? "true" : "false"} />
+      ))}
+    </div>
+
+    <button class="gallery__btn" type="button" data-next>Next</button>
+  </div>
+</div>
+
+<script define:vars={{ id, autoplayMs }}>
+  const root = document.getElementById(id);
+  if (!root) return;
+
+  const track = root.querySelector("[data-gallery-track]");
+  const slides = Array.from(root.querySelectorAll(".gallery__slide"));
+  const dots = Array.from(root.querySelectorAll(".gallery__dot"));
+  const btnPrev = root.querySelector("[data-prev]");
+  const btnNext = root.querySelector("[data-next]");
+
+  if (!track || slides.length === 0) return;
+
+  let idx = 0;
+  let autoplay = null;
+  let raf = 0;
+  let interacting = false;
+
+  const clampIndex = (i) => ((i % slides.length) + slides.length) % slides.length;
+
+  const setActive = (i) => {
+    idx = clampIndex(i);
+    dots.forEach((d, n) => d.setAttribute("aria-current", n === idx ? "true" : "false"));
+  };
+
+  const centeredLeftFor = (el) => {
+    const trackW = track.clientWidth || 0;
+    const elW = el.getBoundingClientRect().width || 0;
+    return el.offsetLeft - Math.max(0, (trackW - elW) / 2);
+  };
+
+  const go = (i, behavior = "smooth") => {
+    const n = clampIndex(i);
+    const el = slides[n];
+    if (!el) return;
+    track.scrollTo({ left: centeredLeftFor(el), behavior });
+    setActive(n);
+  };
+
+  const next = () => {
+    if (idx === slides.length - 1) { go(0, "auto"); return; }  // clean wrap
+    go(idx + 1);
+  };
+
+  const prev = () => {
+    if (idx === 0) { go(slides.length - 1, "auto"); return; }  // clean wrap
+    go(idx - 1);
+  };
+
+  btnNext?.addEventListener("click", () => { stopAutoplay(); next(); startAutoplay(); });
+  btnPrev?.addEventListener("click", () => { stopAutoplay(); prev(); startAutoplay(); });
+
+  dots.forEach((d) => {
+    d.addEventListener("click", () => {
+      const n = Number(d.getAttribute("data-dot") || "0");
+      stopAutoplay();
+      go(n);
+      startAutoplay();
+    });
+  });
+
+  function syncFromScroll() {
+    raf = 0;
+    const left = track.scrollLeft;
+
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < slides.length; i++) {
+      const target = centeredLeftFor(slides[i]);
+      const dist = Math.abs(target - left);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    }
+    setActive(best);
+  }
+
+  track.addEventListener("scroll", () => {
+    if (raf) return;
+    raf = requestAnimationFrame(syncFromScroll);
+  }, { passive: true });
+
+  function stopAutoplay() {
+    if (autoplay) window.clearInterval(autoplay);
+    autoplay = null;
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplay = window.setInterval(() => {
+      if (document.hidden) return;
+      if (interacting) return;
+      next();
+    }, Number(autoplayMs) || 4500);
+  }
+
+  root.addEventListener("mouseenter", () => { interacting = true; stopAutoplay(); });
+  root.addEventListener("mouseleave", () => { interacting = false; startAutoplay(); });
+  root.addEventListener("focusin", () => { interacting = true; stopAutoplay(); });
+  root.addEventListener("focusout", () => { interacting = false; startAutoplay(); });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAutoplay();
+    else if (!interacting) startAutoplay();
+  });
+
+  // mouse drag (desktop)
+  let down = false;
+  let startX = 0;
+  let startLeft = 0;
+
+  track.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "touch") return;
+    down = true;
+    interacting = true;
+    startX = e.clientX;
+    startLeft = track.scrollLeft;
+    track.setPointerCapture(e.pointerId);
+    track.classList.add("is-dragging");
+    track.style.scrollBehavior = "auto";
+    stopAutoplay();
+    e.preventDefault();
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!down) return;
+    const dx = e.clientX - startX;
+    track.scrollLeft = startLeft - dx;
+  });
+
+  const endDrag = () => {
+    if (!down) return;
+    down = false;
+    track.classList.remove("is-dragging");
+    track.style.scrollBehavior = "";
+    syncFromScroll();
+    go(idx, "smooth");
+    window.setTimeout(() => { interacting = false; startAutoplay(); }, 800);
+  };
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+  track.addEventListener("pointerleave", endDrag);
+
+  // keep stable on resize
+  let resizeTimer = 0;
+  window.addEventListener("resize", () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => go(idx, "auto"), 120);
+  });
+
+  setActive(0);
+  go(0, "auto");
+  startAutoplay();
+</script>

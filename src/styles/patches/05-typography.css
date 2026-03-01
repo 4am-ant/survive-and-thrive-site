@@ -1,0 +1,19 @@
+.page-h1{
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+  color: var(--brand);
+  font-size: 16px;
+  margin: 0 0 clamp(18px, 2.4vw, 26px);
+}
+
+.page-copy{
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+  margin: 0;
+}

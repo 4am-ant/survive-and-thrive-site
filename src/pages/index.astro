@@ -1,50 +1,80 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import MainLayout from "../layouts/MainLayout.astro";
+import InstaEmbed from "../components/InstaEmbed.astro";
+
+const instagramEmbeds = [
+  "https://www.instagram.com/p/Cp2n7XTMIC3/?utm_source=ig_embed&utm_campaign=loading",
+  "https://www.instagram.com/p/Cn1YBE6Mgpm/?utm_source=ig_embed&utm_campaign=loading",
+  "https://www.instagram.com/p/CjjMxsFtkcj/?utm_source=ig_embed&utm_campaign=loading",
+];
+
+const socials = {
+  facebook: "https://www.facebook.com/115810378083011",
+  instagram: "https://www.instagram.com/surviveandthriveuk/",
+};
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<MainLayout
+  title="Survive and Thrive - Home"
+  description="We are an independent, non-profit support group for people with ME, Fibromyalgia and other Post-Viral Fatigue Syndromes such as Long-Covid in the High Peak."
+>
+  <section class="container-pad">
+    <div class="content-max">
+      <div class="grid w-full gap-0 md:grid-cols-[65.5%_34.5%]">
+        <div class="bg-white">
+          <img
+            src="/images/hero.jpg"
+            alt="Community"
+            class="hero-image"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+
+        <div class="hero-panel flex">
+          <div class="hero-inner flex w-full flex-col items-center justify-center text-center">
+            <div class="hero-kicker mb-6">WELCOME</div>
+            <h1 class="hero-title">Welcome to Survive and Thrive</h1>
+            <p class="hero-sub mt-7">Join our community!</p>
+            <a href="/contact-us" class="btn-primary mt-10">Contact Us</a>
+          </div>
+        </div>
+      </div>
+
+      <section class="home-section">
+        <h1 class="page-h1">Follow us on Instagram</h2>
+
+        <div class="insta-grid">
+          {instagramEmbeds.map((u) => (
+            <div class="insta-cell">
+              <InstaEmbed url={u} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="home-section">
+        <h1 class="page-h1">Socials</h2>
+
+        <div class="socials-live">
+          <a class="socials-live__link" href={socials.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook Social Link">
+            <svg viewBox="0 0 24 24" aria-hidden="true"  class="socials-live__svg socials-live__svg">
+              <g>
+                <path d="M20 12a8 8 0 10-9.25 7.903v-5.59H8.719V12h2.031v-1.762c0-2.005 1.194-3.113 3.022-3.113.875 0 1.79.156 1.79.156V9.25h-1.008c-.994 0-1.304.617-1.304 1.25V12h2.219l-.355 2.313H13.25v5.59A8.002 8.002 0 0020 12z" fill="#1877F2"></path>
+                <path d="M15.114 14.313L15.47 12h-2.22v-1.5c0-.633.31-1.25 1.304-1.25h1.008V7.281s-.915-.156-1.79-.156c-1.828 0-3.022 1.107-3.022 3.113V12H8.719v2.313h2.031v5.59c.828.13 1.672.13 2.5 0v-5.59h1.864z" fill="#fff"></path>
+              </g>
+            </svg>
+          </a>
+
+          <a class="socials-live__link" href={socials.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram Social Link">
+            <svg viewBox="0 0 24 24" aria-hidden="true"  class="socials-live__svg socials-live__svg">
+              <g fill="#E1306C">
+                <path d="M14.667 12a2.57 2.57 0 0 0-.782-1.885A2.57 2.57 0 0 0 12 9.333a2.57 2.57 0 0 0-1.885.782A2.57 2.57 0 0 0 9.333 12c0 .736.26 1.365.782 1.885.52.521 1.149.782 1.885.782a2.57 2.57 0 0 0 1.885-.782c.521-.52.782-1.149.782-1.885zm1.437 0c0 1.139-.4 2.108-1.198 2.906-.798.799-1.767 1.198-2.906 1.198-1.139 0-2.108-.4-2.906-1.198-.799-.798-1.198-1.767-1.198-2.906 0-1.139.4-2.108 1.198-2.906.798-.799 1.767-1.198 2.906-1.198 1.139 0 2.108.4 2.906 1.198.799.798 1.198 1.767 1.198 2.906zm1.125-4.27c0 .263-.094.489-.281.676a.923.923 0 0 1-.677.282.923.923 0 0 1-.677-.282.923.923 0 0 1-.281-.677c0-.264.093-.49.28-.677a.923.923 0 0 1 .678-.281c.264 0 .49.094.677.281a.923.923 0 0 1 .281.677zM12 5.437l-.797-.006a56.514 56.514 0 0 0-1.099 0c-.25.004-.585.014-1.005.032-.42.017-.778.052-1.073.104a4.177 4.177 0 0 0-.745.192c-.347.14-.653.34-.916.605-.264.263-.466.569-.605.916-.076.202-.14.45-.192.745a8.255 8.255 0 0 0-.104 1.073c-.018.42-.028.755-.032 1.005-.003.25-.003.616 0 1.1l.006.796-.006.797c-.003.483-.003.849 0 1.099.004.25.014.585.032 1.005.017.42.052.778.104 1.073.052.295.116.543.192.745.14.347.34.653.605.916.263.264.569.466.916.605.202.076.45.14.745.192.295.052.653.087 1.073.104.42.018.755.028 1.005.032.25.003.616.003 1.1 0l.796-.005.797.005c.483.003.849.003 1.099 0 .25-.004.585-.014 1.005-.032.42-.017.778-.052 1.073-.104.295-.052.543-.116.745-.192.347-.14.653-.34.916-.605.264-.263.466-.569.605-.916.076-.202.14-.45.192-.745.052-.295.087-.653.104-1.073.018-.42.028-.755.032-1.005.003-.25.003-.616 0-1.1L18.562 12l.006-.797c.003-.483.003-.849 0-1.099a38.59 38.59 0 0 0-.032-1.005 8.255 8.255 0 0 0-.104-1.073 4.177 4.177 0 0 0-.192-.745 2.703 2.703 0 0 0-.605-.916 2.703 2.703 0 0 0-.916-.605 4.177 4.177 0 0 0-.745-.192 8.255 8.255 0 0 0-1.073-.104c-.42-.018-.755-.028-1.005-.032-.25-.003-.616-.003-1.1 0L12 5.438zM20 12c0 1.59-.017 2.691-.052 3.302-.07 1.445-.5 2.563-1.292 3.354-.791.792-1.91 1.222-3.354 1.292-.611.035-1.712.052-3.302.052s-2.691-.017-3.302-.052c-1.445-.07-2.563-.5-3.354-1.292-.792-.791-1.222-1.91-1.292-3.354C4.017 14.691 4 13.59 4 12s.017-2.691.052-3.302c.07-1.445.5-2.563 1.292-3.354.791-.792 1.91-1.222 3.354-1.292C9.309 4.017 10.41 4 12 4s2.691.017 3.302.052c1.445.07 2.563.5 3.354 1.292.792.791 1.222 1.91 1.292 3.354.035.611.052 1.712.052 3.302z"></path>
+              </g>
+            </svg>
+          </a>
+        </div>
+      </section>
+    </div>
+  </section>
+</MainLayout>

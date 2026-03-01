@@ -1,0 +1,59 @@
+.hero-panel{background:var(--panel);}
+
+/* Image defines layout height (no crop, no distortion) */
+.hero-image{
+  display:block;
+  width:100%;
+  height:auto !important;
+  object-fit:contain;
+}
+
+/* --- STACKED (mobile-first) --- */
+.hero-kicker{
+  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(14px, 2.2vw, 18px) !important;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--brand);
+}
+
+.hero-title{
+  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600;
+  line-height:1.08;
+  color:var(--heading);
+  font-size:clamp(40px, 6vw, 58px);
+}
+
+.hero-sub{
+  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(16px, 2.7vw, 22px) !important;
+  color:rgb(0 0 0 / .6);
+}
+
+/* --- SIDE-BY-SIDE (md+) --- */
+@media (min-width:768px){
+  .hero-panel{container-type:inline-size;}
+
+  @supports (container-type: inline-size) {
+    /* Make full-width side-by-side start large enough */
+    @container (min-width: 280px){
+      .hero-kicker{font-size:clamp(15px, 3.2cqi, 19px) !important;}
+      .hero-title{font-size:clamp(42px, 12.0cqi, 58px);}
+      .hero-sub{font-size:clamp(17px, 4.4cqi, 22px) !important;}
+    }
+
+    /* When panel is narrow, reduce padding + allow slightly smaller text */
+    @container (max-width: 420px){
+      .hero-inner{
+        padding-left:2.75rem !important;
+        padding-right:2.75rem !important;
+        padding-top:3.0rem !important;
+        padding-bottom:3.0rem !important;
+      }
+      .hero-kicker{font-size:clamp(13px, 3.0cqi, 16px) !important;}
+      .hero-title{font-size:clamp(36px, 10.5cqi, 48px);}
+      .hero-sub{font-size:clamp(14px, 4.0cqi, 19px) !important;}
+    }
+  }
+}

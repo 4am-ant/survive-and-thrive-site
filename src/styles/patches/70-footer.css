@@ -1,0 +1,29 @@
+.site-footer{
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+.site-footer .content-max{
+  text-align: center;
+}
+
+.site-footer__copy{
+  font-family: var(--font-heading);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.5);
+}
+
+.site-footer__links{
+  margin-top: 24px;
+}
+
+.site-footer__link{
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.site-footer__link:hover{
+  text-decoration: none;
+}

@@ -1,0 +1,33 @@
+---
+const {
+  title = "Map",
+  iframeSrc,
+  directionsUrl,
+} = Astro.props;
+
+if (!iframeSrc) throw new Error("MapEmbed requires iframeSrc");
+if (!directionsUrl) throw new Error("MapEmbed requires directionsUrl");
+---
+
+<section aria-label={title} class="w-full">
+  <div class="relative w-full overflow-hidden">
+    <iframe
+      src={iframeSrc}
+      style="border:0;"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="h-[320px] w-full sm:h-[420px] md:h-[520px]"
+      title={title}
+    ></iframe>
+
+    <a
+      href={directionsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="absolute left-4 top-4 inline-flex items-center justify-center bg-brand px-4 py-2 font-sans text-[11px] uppercase tracking-[0.22em] text-white transition-colors hover:bg-[color:var(--brand-hover)]"
+    >
+      Get directions
+    </a>
+  </div>
+</section>

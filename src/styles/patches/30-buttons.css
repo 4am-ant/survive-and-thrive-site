@@ -1,0 +1,25 @@
+:root{
+  --btn-font:12px;
+  --btn-track:0.30em;
+  --btn-pad-y:0.9rem;
+  --btn-pad-x:2.9rem;
+}
+
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--brand);
+  color:#fff;
+  text-decoration:none;
+  padding:var(--btn-pad-y) var(--btn-pad-x);
+  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
+  font-size:var(--btn-font);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--btn-track);
+  transition:background-color .3s ease;
+
+  white-space:nowrap; /* prevent CONTACT / US split */
+}
+.btn-primary:hover{background:var(--brand-hover);}

@@ -1,0 +1,56 @@
+---
+import { items, isActive } from "./NavData";
+
+const { currentPath = "/" } = Astro.props;
+---
+<!-- Hamburger (below md only) -->
+<button
+  type="button"
+  class="mobile-burger md:hidden"
+  aria-label="Open menu"
+  data-menu-open
+>
+  <span class="sr-only">Menu</span>
+  <span class="burger">
+    <span></span><span></span><span></span>
+  </span>
+</button>
+
+<!-- Drawer overlay -->
+<div class="fixed inset-0 z-50 hidden" data-menu-root>
+  <div class="nav-dim" data-menu-close></div>
+
+  <aside class="nav-drawer" role="dialog" aria-modal="true">
+    <button type="button" class="nav-close" aria-label="Close menu" data-menu-close>
+      <span class="text-3xl leading-none">×</span>
+    </button>
+
+    <ul class="nav-drawer-list">
+      {items.map((it) => (
+        <li>
+          <a href={it.href} class="navlink" style={isActive(currentPath, it.href) ? "color: var(--brand);" : ""}>
+            {it.label}
+            {isActive(currentPath, it.href) && <span class="navlink__active-underline" />}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+
+  <script is:inline>
+    (() => {
+      const root = document.querySelector("[data-menu-root]");
+      const openBtn = document.querySelector("[data-menu-open]");
+      if (!root || !openBtn) return;
+
+      const open = () => root.classList.remove("hidden");
+      const close = () => root.classList.add("hidden");
+
+      openBtn.addEventListener("click", open);
+      root.querySelectorAll("[data-menu-close]").forEach((el) => el.addEventListener("click", close));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close();
+      });
+    })();
+  </script>
+</div>

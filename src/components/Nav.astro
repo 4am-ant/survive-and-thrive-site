@@ -1,0 +1,24 @@
+---
+import NavDesktop from "./nav/NavDesktop.astro";
+import NavCondensed from "./nav/NavCondensed.astro";
+import NavMobile from "./nav/NavMobile.astro";
+
+const { currentPath = "/", logoSrc = "/images/logo.png", siteName = "Survive and Thrive" } = Astro.props;
+---
+
+<header class="container-pad">
+  <div class="content-max relative">
+    <div class="site-logo-wrap">
+      <NavMobile currentPath={currentPath} />
+
+      <a href="/" class="inline-flex items-center" aria-label={siteName}>
+        <img src={logoSrc} alt={siteName} class="site-logo" />
+      </a>
+    </div>
+
+    <nav class="site-nav mb-12 flex items-center justify-center">
+      <NavDesktop currentPath={currentPath} />
+      <NavCondensed currentPath={currentPath} />
+    </nav>
+  </div>
+</header>

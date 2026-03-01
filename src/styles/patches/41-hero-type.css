@@ -1,0 +1,45 @@
+.hero-panel{background:var(--panel);}
+
+/* stacked (mobile-first) */
+.hero-kicker{
+  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(14px, 2.2vw, 18px);
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--brand);
+}
+
+.hero-title{
+  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
+  font-weight:600;
+  line-height:1.08;
+  color:var(--heading);
+  font-size:clamp(40px, 6vw, 58px);
+}
+
+.hero-sub{
+  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(16px, 2.7vw, 22px);
+  color:rgb(0 0 0 / .6);
+}
+
+/* side-by-side (md+) */
+@media (min-width: 768px){
+  /* make WELCOME not tiny */
+  .hero-kicker{ font-size:clamp(14px, 1.2vw, 16px); }
+
+  /* keep title steadier; don't start shrinking immediately */
+  .hero-title{ font-size:50px; }
+
+  .hero-sub{ font-size:clamp(14px, 1.25vw, 18px); }
+}
+
+/* gentle shrink band (only once we're actually getting narrower) */
+@media (min-width: 1020px) and (max-width: 1200px){
+  .hero-title{ font-size:clamp(44px, 4.2vw, 50px); }
+}
+
+/* danger band: shrink hard so panel never overtakes image */
+@media (min-width: 768px) and (max-width: 1020px){
+  .hero-title{ font-size:clamp(24px, 2.0vw, 40px); }
+}

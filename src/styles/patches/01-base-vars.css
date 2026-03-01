@@ -1,0 +1,16 @@
+:root{
+  --brand:#8702a9;
+  --brand-hover:rgb(173,3,216);
+  --panel:#f8f0ff;
+  --bg:#ffffff;
+  --text:#111111;
+  --heading:#151515;
+}
+
+html,body{background:var(--bg);color:var(--text);}
+body{
+  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+a{color:inherit;}

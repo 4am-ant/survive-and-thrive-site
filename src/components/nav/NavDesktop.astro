@@ -1,0 +1,15 @@
+---
+import { items, isActive } from "./NavData";
+
+const { currentPath = "/" } = Astro.props;
+---
+<ul class="navlist hidden items-center lg:flex">
+  {items.map((it) => (
+    <li>
+      <a href={it.href} class="navlink">
+        {it.label}
+        {isActive(currentPath, it.href) && <span class="navlink__active-underline" />}
+      </a>
+    </li>
+  ))}
+</ul>

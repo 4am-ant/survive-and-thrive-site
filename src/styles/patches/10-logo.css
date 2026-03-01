@@ -1,0 +1,51 @@
+:root{
+  --logo-h: clamp(64px, 8vw, 110px);
+  --logo-h-sm: clamp(44px, 10vw, 70px);
+}
+
+/* desktop/tablet: simple centred row */
+.site-logo-wrap{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding-top: clamp(26px, 4.6vw, 80px);
+  padding-bottom: clamp(18px, 3.6vw, 50px);
+}
+
+/* logo itself */
+.site-logo{
+  height: var(--logo-h);
+  width: auto;
+  display:block;
+}
+
+/* mobile: 3-column grid so logo is ALWAYS truly centred */
+@media (max-width: 767px){
+  .site-logo-wrap{
+    display:grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items:center;
+    justify-items:center;
+    padding-block: clamp(14px, 5vw, 28px);
+  }
+
+  /* burger lives in column 1 */
+  .mobile-burger{
+    grid-column: 1;
+    justify-self:start;
+    position:relative;
+    top:auto;
+    left:auto;
+    transform:none;
+  }
+
+  /* logo link sits in the middle column */
+  .site-logo-wrap > a{
+    grid-column: 2;
+  }
+
+  .site-logo{
+    height: var(--logo-h-sm);
+  }
+}

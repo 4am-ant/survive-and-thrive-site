@@ -1,0 +1,31 @@
+:root{
+  --brand: #8702A9;
+  --brand-hover: rgb(173 3 216);
+  --bg: #ffffff;
+  --panel: #f8f0ff;
+  --text: #151515;
+  --muted: rgb(0 0 0 / 0.58);
+
+  --font-body: "Mulish","Muli", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-heading: "Quicksand", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+html, body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family: var(--font-heading);
+}
+
+a{
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover{
+  color: var(--brand-hover);
+}

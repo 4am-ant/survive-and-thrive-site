@@ -101,7 +101,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const emailBody = lines.join("\n");
     const subject   = `Website enquiry from ${name || email}`;
-    const toAddress = env?.CONTACT_EMAIL ?? "surviveandthrive@4amlabs.com";
+    const toAddress = env?.CONTACT_EMAIL ?? "surviveandthrive.fibro.cfs.me@outlook.com";
 
     // ── Send via Cloudflare Email Workers ─────────────────────────────────────
     // Requires: Email Routing enabled on the domain + send_email binding in wrangler.json.

@@ -15,6 +15,22 @@
 		{
 			"pattern": "www.surviveandthrivesupportgroup.com",
 			"custom_domain": true
+		},
+		{
+			"pattern": "surviveandthrivesupportgroup.co.uk",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.surviveandthrivesupportgroup.co.uk",
+			"custom_domain": true
+		},
+		{
+			"pattern": "surviveandthrivesupportgroup.org",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.surviveandthrivesupportgroup.org",
+			"custom_domain": true
 		}
 	],
 	"send_email": [

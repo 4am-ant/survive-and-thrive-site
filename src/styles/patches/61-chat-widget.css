@@ -32,6 +32,9 @@
   background:var(--brand-hover);
   transform:scale(1.07);
 }
+.chat-btn:active{
+  transform:scale(0.95);
+}
 .chat-btn__icon,
 .chat-btn__close{
   width:28px;

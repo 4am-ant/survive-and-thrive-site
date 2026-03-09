@@ -101,6 +101,11 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
           </div>
 
           <div id="cf-status" class="form-status" aria-live="polite"></div>
+
+          <!-- Submitting / success overlay -->
+          <div id="cf-overlay" class="form-overlay" hidden>
+            <p id="cf-overlay-msg" class="form-overlay__msg">Sending your message…</p>
+          </div>
         </form>
       </div>
 
@@ -121,27 +126,25 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
 </MainLayout>
 
 <script>
-  const form = document.getElementById("contact-form") as HTMLFormElement | null;
-  const status = document.getElementById("cf-status") as HTMLElement | null;
-  const emailInput = document.getElementById("cf-email") as HTMLInputElement | null;
+  const form       = document.getElementById("contact-form")   as HTMLFormElement | null;
+  const status     = document.getElementById("cf-status")      as HTMLElement | null;
+  const emailInput = document.getElementById("cf-email")       as HTMLInputElement | null;
   const emailError = document.getElementById("cf-email-error") as HTMLElement | null;
+  const overlay    = document.getElementById("cf-overlay")     as HTMLElement | null;
+  const overlayMsg = document.getElementById("cf-overlay-msg") as HTMLElement | null;
 
   const validateEmail = () => {
     if (!emailInput || !emailError) return false;
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const value = emailInput.value.trim();
-    
     if (value === "") {
       emailError.textContent = "Email address is required.";
       return false;
     }
-    
     if (!emailRegex.test(value)) {
       emailError.textContent = "Please enter a valid email address.";
       return false;
     }
-    
     emailError.textContent = "";
     return true;
   };
@@ -152,10 +155,9 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
     e.preventDefault();
     if (!form || !status || !emailInput) return;
 
-    // Reset status and trigger validation
     status.textContent = "";
     status.className = "form-status";
-    
+
     const isEmailValid = validateEmail();
     if (!isEmailValid) {
       emailInput.focus();
@@ -165,6 +167,12 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
     const submitBtn = form.querySelector<HTMLButtonElement>(".form-submit");
     if (submitBtn) submitBtn.disabled = true;
 
+    if (overlay && overlayMsg) {
+      overlayMsg.textContent = "Sending your message…";
+      overlayMsg.className = "form-overlay__msg";
+      overlay.hidden = false;
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -173,18 +181,21 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
       const data = (await res.json()) as { success: boolean; error?: string };
 
       if (data.success) {
-        status.textContent = "Thank you — your message has been sent. We will get back to you as soon as we can.";
-        status.classList.add("form-status--ok");
+        if (overlayMsg) {
+          overlayMsg.textContent = "Thank you — your message has been sent. We will get back to you as soon as we can.";
+          overlayMsg.className = "form-overlay__msg form-overlay__msg--ok";
+        }
         form.reset();
-        // Reset Turnstile widget
         if (typeof (window as any).turnstile !== "undefined") {
           (window as any).turnstile.reset();
         }
       } else {
+        if (overlay) overlay.hidden = true;
         status.textContent = data.error ?? "Something went wrong. Please try again.";
         status.classList.add("form-status--err");
       }
     } catch {
+      if (overlay) overlay.hidden = true;
       status.textContent = "Could not send message. Please check your connection and try again.";
       status.classList.add("form-status--err");
     } finally {

@@ -5,6 +5,12 @@
 }
 
 /* ── Form primitives ───────────────────────────────────────────────────────── */
+.form-label{
+  font-size:0.9rem;
+  font-weight:600;
+  color:var(--text);
+}
+
 .form-field{
   display:flex;
   flex-direction:column;
@@ -102,6 +108,35 @@
   min-height: 1.2em;
   text-align: left; /* align with input text */
   padding-left: 0.85rem; /* align with floating label/input padding */
+}
+
+/* ── Submitting / success overlay ──────────────────────────────────────────── */
+.contact-form,
+.chat-form{
+  position:relative;
+}
+.form-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.97);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  padding:1.5rem;
+  text-align:center;
+}
+.form-overlay[hidden]{ display:none; }
+.form-overlay__msg{
+  font-size:1rem;
+  color:var(--text);
+  margin:0;
+  line-height:1.5;
+}
+.form-overlay__msg--ok{
+  color:#1a7a1a;
+  font-weight:600;
+  font-size:1.05rem;
 }
 
 /* ── Contact page layout ───────────────────────────────────────────────────── */

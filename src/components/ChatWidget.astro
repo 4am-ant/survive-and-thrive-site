@@ -29,16 +29,15 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
   </div>
 
   <form id="chat-form" class="chat-form" novalidate data-source="chat">
-    <div class="form-field">
-      <label for="chat-name" class="form-label">Name</label>
-      <input id="chat-name" name="name" type="text" class="form-input" autocomplete="name" />
+    <div class="form-field-float">
+      <input id="chat-name" name="name" type="text" class="form-input-float" autocomplete="name" placeholder=" " />
+      <label for="chat-name" class="form-label-float">Name</label>
     </div>
 
-    <div class="form-field">
-      <label for="chat-email" class="form-label">
-        Email <span class="form-required" aria-hidden="true">*</span>
-      </label>
-      <input id="chat-email" name="email" type="email" class="form-input" required autocomplete="email" />
+    <div class="form-field-float">
+      <input id="chat-email" name="email" type="email" class="form-input-float" required autocomplete="email" placeholder=" " />
+      <label for="chat-email" class="form-label-float">Email *</label>
+      <div id="chat-email-error" class="form-error-inline" aria-live="polite"></div>
     </div>
 
     <div class="form-field">
@@ -62,14 +61,23 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
     </div>
 
     <div id="chat-status" class="form-status" aria-live="polite"></div>
+
+    <!-- Submitting / success overlay -->
+    <div id="chat-overlay" class="form-overlay" hidden>
+      <p id="chat-overlay-msg" class="form-overlay__msg">Sending…</p>
+    </div>
   </form>
 </div>
 
 <script>
-  const btn   = document.getElementById("chat-btn")   as HTMLButtonElement | null;
-  const panel = document.getElementById("chat-panel") as HTMLElement | null;
-  const form  = document.getElementById("chat-form")  as HTMLFormElement | null;
-  const statusEl = document.getElementById("chat-status") as HTMLElement | null;
+  const btn      = document.getElementById("chat-btn")        as HTMLButtonElement | null;
+  const panel    = document.getElementById("chat-panel")      as HTMLElement | null;
+  const form     = document.getElementById("chat-form")       as HTMLFormElement | null;
+  const statusEl = document.getElementById("chat-status")     as HTMLElement | null;
+  const emailInput = document.getElementById("chat-email")    as HTMLInputElement | null;
+  const emailError = document.getElementById("chat-email-error") as HTMLElement | null;
+  const overlay    = document.getElementById("chat-overlay")  as HTMLElement | null;
+  const overlayMsg = document.getElementById("chat-overlay-msg") as HTMLElement | null;
 
   function openPanel() {
     if (!panel || !btn) return;
@@ -90,36 +98,69 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
     panel?.hidden ? openPanel() : closePanel();
   });
 
-  // Close on Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !panel?.hidden) closePanel();
   });
 
+  const validateEmail = () => {
+    if (!emailInput || !emailError) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const value = emailInput.value.trim();
+    if (value === "") {
+      emailError.textContent = "Email address is required.";
+      return false;
+    }
+    if (!emailRegex.test(value)) {
+      emailError.textContent = "Please enter a valid email address.";
+      return false;
+    }
+    emailError.textContent = "";
+    return true;
+  };
+
+  emailInput?.addEventListener("blur", validateEmail);
+
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!form || !statusEl) return;
+    if (!form || !statusEl || !emailInput) return;
+
+    const isEmailValid = validateEmail();
+    if (!isEmailValid) {
+      emailInput.focus();
+      return;
+    }
 
     const submitBtn = form.querySelector<HTMLButtonElement>(".chat-submit");
     if (submitBtn) submitBtn.disabled = true;
     statusEl.textContent = "";
     statusEl.className = "form-status";
 
+    if (overlay && overlayMsg) {
+      overlayMsg.textContent = "Sending…";
+      overlayMsg.className = "form-overlay__msg";
+      overlay.hidden = false;
+    }
+
     try {
       const res  = await fetch("/api/contact", { method: "POST", body: new FormData(form) });
       const data = (await res.json()) as { success: boolean; error?: string };
 
       if (data.success) {
-        statusEl.textContent = "Message sent — we'll be in touch soon!";
-        statusEl.classList.add("form-status--ok");
+        if (overlayMsg) {
+          overlayMsg.textContent = "Message sent — we'll be in touch soon!";
+          overlayMsg.className = "form-overlay__msg form-overlay__msg--ok";
+        }
         form.reset();
         if (typeof (window as any).turnstile !== "undefined") {
           (window as any).turnstile.reset();
         }
       } else {
+        if (overlay) overlay.hidden = true;
         statusEl.textContent = data.error ?? "Something went wrong. Please try again.";
         statusEl.classList.add("form-status--err");
       }
     } catch {
+      if (overlay) overlay.hidden = true;
       statusEl.textContent = "Could not send. Please check your connection.";
       statusEl.classList.add("form-status--err");
     } finally {

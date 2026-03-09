@@ -165,6 +165,9 @@
 }
 
 /* ── Privacy / policy page ─────────────────────────────────────────────────── */
+.policy-page{
+  text-align: left;
+}
 .policy-page h2{
   margin-top:2rem;
 }

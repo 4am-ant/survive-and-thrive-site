@@ -132,6 +132,7 @@
   color:var(--text);
   margin:0;
   line-height:1.5;
+  max-width: 75%; /* Reduce width by 25% as requested */
 }
 .form-overlay__msg--ok{
   color:#1a7a1a;

@@ -2,38 +2,8 @@ export const prerender = false;
 
 import type { APIRoute } from "astro";
 
-const TURNSTILE_VERIFY_URL =
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-
-// FROM address — must be within the Email Routing domain once that is configured.
-// Update this if Email Routing is set up on a different domain.
-const FROM_ADDRESS = "noreply@surviveandthrivesupportgroup.co.uk";
-const FROM_DISPLAY = `"Survive and Thrive Website" <${FROM_ADDRESS}>`;
-
-/** Build a minimal RFC 2822 plain-text email string. */
-function buildRawEmail(
-  from: string,
-  to: string,
-  replyTo: string,
-  subject: string,
-  body: string
-): string {
-  // Encode subject as UTF-8 quoted-printable header if it contains non-ASCII
-  const safeSubject = subject.replace(/[^\x20-\x7E]/g, "?");
-  const messageId = `<${crypto.randomUUID()}@surviveandthrivesupportgroup.co.uk>`;
-  return [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Reply-To: ${replyTo}`,
-    `Subject: ${safeSubject}`,
-    `Message-ID: ${messageId}`,
-    "MIME-Version: 1.0",
-    "Content-Type: text/plain; charset=utf-8",
-    "Content-Transfer-Encoding: 8bit",
-    "",
-    body,
-  ].join("\r\n");
-}
+const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const FROM_DISPLAY = "Survive and Thrive Website <noreply@surviveandthrivesupportgroup.co.uk>";
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const json = (body: object, status = 200) =>
@@ -95,24 +65,34 @@ export const POST: APIRoute = async ({ request, locals }) => {
       `Name: ${name || "(not provided)"}`,
       `Email: ${email}`,
     ];
-    if (phone) lines.push(`Phone: ${phone}`);
+    if (phone)   lines.push(`Phone: ${phone}`);
     if (message) lines.push("", "Message:", message);
     if (notes)   lines.push("", "Other notes:", notes);
 
-    const emailBody = lines.join("\n");
+    const toAddress = env?.CONTACT_EMAIL ?? "contactform@surviveandthrivesupportgroup.co.uk";
     const subject   = `Website enquiry from ${name || email}`;
-    const toAddress = env?.CONTACT_EMAIL ?? "surviveandthrive.fibro.cfs.me@outlook.com";
 
-    // ── Send via Cloudflare Email Workers ─────────────────────────────────────
-    // Requires: Email Routing enabled on the domain + send_email binding in wrangler.json.
-    // The destination_address in wrangler.json must match toAddress.
-    const rawEmail = buildRawEmail(FROM_DISPLAY, toAddress, email, subject, emailBody);
+    // ── Send via Resend ───────────────────────────────────────────────────────
+    const resendRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${env?.RESEND_API_KEY ?? ""}`,
+      },
+      body: JSON.stringify({
+        from:     FROM_DISPLAY,
+        to:       [toAddress],
+        reply_to: email,
+        subject,
+        text:     lines.join("\n"),
+      }),
+    });
 
-    // EmailMessage is a Cloudflare Workers runtime class — dynamic import avoids
-    // build-time resolution errors if the module is not available locally.
-    const { EmailMessage } = await import("cloudflare:email" as string);
-    const emailMsg = new EmailMessage(FROM_ADDRESS, toAddress, rawEmail);
-    await env.EMAIL.send(emailMsg);
+    if (!resendRes.ok) {
+      const err = await resendRes.text();
+      console.error("[contact] Resend error:", resendRes.status, err);
+      return json({ success: false, error: "An unexpected error occurred. Please try again later." }, 500);
+    }
 
     return json({ success: true });
   } catch (err) {

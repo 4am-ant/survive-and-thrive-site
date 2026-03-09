@@ -7,17 +7,10 @@ declare namespace App {
     runtime: {
       env: {
         ASSETS: Fetcher;
-        // send_email binding — requires Cloudflare Email Routing to be enabled on the domain
-        EMAIL: {
-          send(message: {
-            from: string;
-            to: string;
-            raw: string | ReadableStream;
-          }): Promise<void>;
-        };
-        // Secret env vars — set in Cloudflare dashboard → Workers & Pages → Settings → Variables
+        // Secret env vars — set via `wrangler secret put <NAME>` or Cloudflare dashboard
         TURNSTILE_SECRET_KEY: string;
         CONTACT_EMAIL: string;
+        RESEND_API_KEY: string;
       };
     };
   }

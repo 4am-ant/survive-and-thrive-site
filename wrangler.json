@@ -33,12 +33,6 @@
 			"custom_domain": true
 		}
 	],
-	"send_email": [
-		{
-			"name": "EMAIL",
-			"destination_address": "surviveandthrive.fibro.cfs.me@outlook.com"
-		}
-	],
 	"observability": {
 		"enabled": true
 	},

@@ -69,7 +69,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (message) lines.push("", "Message:", message);
     if (notes)   lines.push("", "Other notes:", notes);
 
-    const toAddress = env?.CONTACT_EMAIL ?? "contactform@surviveandthrivesupportgroup.co.uk";
+    const toAddress = env?.CONTACT_EMAIL ?? "surviveandthrive.fibro.cfs.me@outlook.com";
     const subject   = `Website enquiry from ${name || email}`;
 
     // ── Send via Resend ───────────────────────────────────────────────────────

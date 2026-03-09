@@ -14,15 +14,19 @@ const FROM_DISPLAY = `"Survive and Thrive Website" <${FROM_ADDRESS}>`;
 function buildRawEmail(
   from: string,
   to: string,
+  replyTo: string,
   subject: string,
   body: string
 ): string {
   // Encode subject as UTF-8 quoted-printable header if it contains non-ASCII
   const safeSubject = subject.replace(/[^\x20-\x7E]/g, "?");
+  const messageId = `<${crypto.randomUUID()}@surviveandthrivesupportgroup.co.uk>`;
   return [
     `From: ${from}`,
     `To: ${to}`,
+    `Reply-To: ${replyTo}`,
     `Subject: ${safeSubject}`,
+    `Message-ID: ${messageId}`,
     "MIME-Version: 1.0",
     "Content-Type: text/plain; charset=utf-8",
     "Content-Transfer-Encoding: 8bit",
@@ -102,7 +106,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // ── Send via Cloudflare Email Workers ─────────────────────────────────────
     // Requires: Email Routing enabled on the domain + send_email binding in wrangler.json.
     // The destination_address in wrangler.json must match toAddress.
-    const rawEmail = buildRawEmail(FROM_DISPLAY, toAddress, subject, emailBody);
+    const rawEmail = buildRawEmail(FROM_DISPLAY, toAddress, email, subject, emailBody);
 
     // EmailMessage is a Cloudflare Workers runtime class — dynamic import avoids
     // build-time resolution errors if the module is not available locally.

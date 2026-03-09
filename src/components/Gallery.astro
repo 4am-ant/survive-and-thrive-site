@@ -1,6 +1,6 @@
 ---
 type Item = { src: string; alt?: string };
-const { items = [] as Item[], autoplayMs = 4500 } = Astro.props;
+const { items = [] as Item[], autoplayMs = 4500, lightboxId } = Astro.props;
 
 const id = `g_${Math.random().toString(36).slice(2)}`;
 ---
@@ -16,6 +16,8 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
           loading="lazy"
           decoding="async"
           draggable="false"
+          style={lightboxId ? "cursor:zoom-in" : ""}
+          data-lightbox-trigger={i}
         />
       </figure>
     ))}
@@ -34,7 +36,7 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
   </div>
 </div>
 
-<script define:vars={{ id, autoplayMs }}>
+<script define:vars={{ id, autoplayMs, lightboxId }}>
   const root = document.getElementById(id);
   if (!root) return;
 
@@ -73,12 +75,12 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
   };
 
   const next = () => {
-    if (idx === slides.length - 1) { go(0, "auto"); return; }  // clean wrap
+    if (idx === slides.length - 1) { go(0, "auto"); return; }
     go(idx + 1);
   };
 
   const prev = () => {
-    if (idx === 0) { go(slides.length - 1, "auto"); return; }  // clean wrap
+    if (idx === 0) { go(slides.length - 1, "auto"); return; }
     go(idx - 1);
   };
 
@@ -93,6 +95,35 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
       startAutoplay();
     });
   });
+
+  // Lightbox trigger — pointerup + elementFromPoint bypasses pointer-capture re-targeting.
+  // When setPointerCapture is active, e.target on click/pointerup is the captured element
+  // (track), not the image underneath. elementFromPoint does a fresh DOM hit-test that
+  // ignores capture entirely, so it always returns the real element under the cursor.
+  if (lightboxId) {
+    let tapX = 0;
+    let tapY = 0;
+
+    track.addEventListener("pointerdown", (e) => {
+      tapX = e.clientX;
+      tapY = e.clientY;
+    });
+
+    track.addEventListener("pointerup", (e) => {
+      // Distance guard: if pointer travelled more than 5px it was a drag, not a tap
+      if (Math.abs(e.clientX - tapX) > 5 || Math.abs(e.clientY - tapY) > 5) return;
+      // Belt-and-suspenders: also respect the dragged flag set by the mouse-drag handler
+      if (root.dataset.dragged === "true") return;
+      // Fresh hit-test — unaffected by pointer capture
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const trigger = el?.closest("[data-lightbox-trigger]");
+      if (!trigger) return;
+      const index = parseInt(trigger.getAttribute("data-lightbox-trigger"), 10);
+      window.dispatchEvent(new CustomEvent("open-lightbox", {
+        detail: { id: lightboxId, index }
+      }));
+    });
+  }
 
   function syncFromScroll() {
     raf = 0;
@@ -151,13 +182,20 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
     track.setPointerCapture(e.pointerId);
     track.classList.add("is-dragging");
     track.style.scrollBehavior = "auto";
+    root.dataset.dragged = "false"; // Reset drag state
     stopAutoplay();
-    e.preventDefault();
+    // Do NOT preventDefault() here as it blocks the click event
   });
 
   track.addEventListener("pointermove", (e) => {
     if (!down) return;
     const dx = e.clientX - startX;
+    
+    // If moved more than 5px, it's a drag, not a click
+    if (Math.abs(dx) > 5) {
+      root.dataset.dragged = "true";
+    }
+    
     track.scrollLeft = startLeft - dx;
   });
 
@@ -168,7 +206,12 @@ const id = `g_${Math.random().toString(36).slice(2)}`;
     track.style.scrollBehavior = "";
     syncFromScroll();
     go(idx, "smooth");
-    window.setTimeout(() => { interacting = false; startAutoplay(); }, 800);
+    window.setTimeout(() => { 
+      interacting = false; 
+      startAutoplay(); 
+      // Delay resetting drag state slightly so click event has time to fire and see the 'true' state
+      window.setTimeout(() => { root.dataset.dragged = "false"; }, 100);
+    }, 800);
   };
 
   track.addEventListener("pointerup", endDrag);

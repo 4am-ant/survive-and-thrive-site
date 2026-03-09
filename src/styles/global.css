@@ -1,9 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Mulish:wght@300;400;600;700&display=swap");
 @import "tailwindcss";
 
 @import "./patches/01-base-vars.css";
 @import "./patches/02-container.css";
-@import "./patches/04-theme.css";
 @import "./patches/05-typography.css";
 @import "./patches/10-logo.css";
 
@@ -11,10 +9,7 @@
 @import "./patches/25-nav-mobile.css";
 @import "./patches/30-buttons.css";
 
-@import "./patches/40-hero-media.css";
-@import "./patches/41-hero-type.css";
-@import "./patches/43-hero-spacing.css";
-@import "./patches/42-hero-layout.css";
+@import "./patches/40-hero.css";
 
 @import "./patches/90-responsive.css";
 
@@ -24,3 +19,10 @@
 @import "./patches/70-footer.css";
 
 @import "./patches/52-home.css";
+@import "./patches/53-meetings.css";
+@import "./patches/54-resources.css";
+@import "./patches/55-newsletters.css";
+@import "./patches/56-conditions.css";
+
+@import "./patches/60-forms.css";
+@import "./patches/61-chat-widget.css";

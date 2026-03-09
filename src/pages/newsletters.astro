@@ -1,0 +1,94 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const newsletters = [
+  {
+    title: "Making Mobility Stylish",
+    author: "By Grace Leighton-Carr",
+    file:  "/newsletters/stylish-mobility.pdf",
+  },
+];
+---
+
+<MainLayout
+  title="Newsletters – Survive and Thrive"
+  description="Read and download newsletters from Survive and Thrive."
+>
+  <section class="container-pad">
+    <div class="content-max">
+
+      <h1>Newsletters</h1>
+
+      <div class="nl-grid">
+        {newsletters.map(n => (
+          <div class="nl-card">
+            <div class="nl-preview">
+              <canvas data-pdf={n.file} aria-hidden="true"></canvas>
+              <a
+                href={n.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="nl-preview__link"
+                aria-label={`Open ${n.title} (PDF)`}
+              ></a>
+            </div>
+            <h2>{n.title}</h2>
+            {n.author && <p>{n.author}</p>}
+            <a
+              href={n.file}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+            >Download PDF</a>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+</MainLayout>
+
+<script is:inline>
+(function () {
+  var LIB    = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  var WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  var s = document.createElement('script');
+  s.src = LIB;
+  s.onload = function () {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER;
+    renderAll();
+  };
+  document.head.appendChild(s);
+
+  async function renderAll() {
+    var canvases = document.querySelectorAll('canvas[data-pdf]');
+    for (var i = 0; i < canvases.length; i++) {
+      await renderOne(canvases[i]);
+    }
+  }
+
+  async function renderOne(canvas) {
+    var url = canvas.dataset.pdf;
+    try {
+      var pdf      = await pdfjsLib.getDocument(url).promise;
+      var page     = await pdf.getPage(1);
+      var base     = page.getViewport({ scale: 1 });
+      var dpr      = window.devicePixelRatio || 1;
+      var cssWidth = canvas.parentElement.offsetWidth || 320;
+      var scale    = (cssWidth / base.width) * dpr;
+      var vp       = page.getViewport({ scale: scale });
+
+      canvas.width        = vp.width;
+      canvas.height       = vp.height;
+      canvas.style.width  = cssWidth + 'px';
+      canvas.style.height = Math.round(vp.height / dpr) + 'px';
+
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+      canvas.closest('.nl-preview').classList.add('nl-preview--ready');
+    } catch (err) {
+      console.warn('PDF preview failed:', url, err);
+    }
+  }
+})();
+</script>

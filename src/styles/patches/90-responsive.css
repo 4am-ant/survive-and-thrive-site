@@ -1,37 +1,27 @@
-@media(max-width:1024px){
-  :root{
-    --logo-h:78px;--logo-h-sm:88px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   90-responsive.css — Responsive token overrides
+   Only logo sizing tokens remain here; hero/nav sizes are handled with
+   clamp() directly in their component files.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-    --nav-font:14px;
-    --nav-track:0.22em;
-    --nav-gap:1.25rem;
-
-    --hero-h:560px;
-    --hero-h-sm:480px;
-    --hero-h-xs:420px;
-
-    --hero-title:40px;
-    --hero-title-sm:42px;
-
-    --hero-sub:16px;
-    --hero-kicker:12px;
-  }
-}
+/* ── Logo sizes by breakpoint ───────────────────────────────────────────── */
+/* Default (>640px): defined in 10-logo.css via clamp() */
 
 @media(max-width:640px){
   :root{
-    --logo-h:72px;--logo-h-sm:72px;
-
-    --nav-font:13px;
-    --nav-track:0.18em;
-    --nav-gap:1.0rem;
-
-    --hero-h-xs:360px;
-
-    --hero-title:34px;
-    --hero-title-sm:34px;
-
-    --hero-sub:15px;
-    --hero-kicker:12px;
+    --logo-h:    56px;
+    --logo-h-sm: 54px;
   }
+}
+
+@media(max-width:480px){
+  :root{
+    --logo-h:    48px;
+    --logo-h-sm: 48px;
+  }
+}
+
+/* ── Mobile nav bottom spacing (reduces gap before hero on small screens) ── */
+@media(max-width:767px){
+  .site-nav{ margin-bottom: clamp(14px, 3vw, 22px) !important; }
 }

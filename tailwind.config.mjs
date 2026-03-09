@@ -12,7 +12,7 @@ export default {
       },
       fontFamily: {
         sans: ["Quicksand", "ui-sans-serif", "system-ui", "sans-serif"],
-        body: ["Muli", "ui-sans-serif", "system-ui", "sans-serif"],
+        body: ["Raleway", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },
   },

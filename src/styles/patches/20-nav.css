@@ -1,42 +1,40 @@
 :root{
-  --nav-underline-h:2px;
+  --nav-underline-h: 2px;
 }
 
-/* default (narrower): tighter */
 .navlist{
-  gap:clamp(1.0rem, 2vw, 1.5rem) !important;
+  gap: clamp(1.0rem, 2vw, 1.5rem) !important;
 }
 
-@media (min-width: 1024px){
+@media(min-width:1280px){
   .navlist{
-    gap:clamp(1.5rem, 3.2vw, 2.5rem) !important;
+    gap: clamp(1.5rem, 3.2vw, 2.5rem) !important;
   }
 }
 
+/* Inherits Quicksand 400 from base; overrides: uppercase, tracking, size, colour */
 .navlink{
-  position:relative;
-  padding-bottom:.65rem;
-  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
-  font-size:clamp(12px, 1.25vw, 16px) !important;
-  text-transform:uppercase;
-  letter-spacing:clamp(0.14em, 0.45vw, 0.22em) !important;
-  color:#000;
-  text-decoration:none;
-  transition:color .2s ease;
-  white-space:nowrap;
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
+  position:       relative;
+  padding-bottom: .65rem;
+  font-size:      clamp(14px, 1.042vw, 16px); /* 14px at <1344px → 16px at 1536px */
+  text-transform: uppercase;
+  letter-spacing: 0.214em;
+  color:          var(--text);
+  text-decoration: none;
+  transition:     color .2s ease;
+  white-space:    nowrap;
+  display:        inline-flex;
+  align-items:    center;
+  gap:            .35rem;
 }
-.navlink:hover{color:var(--brand);}
+.navlink:hover{ color: var(--brand); }
 
 .navlink__active-underline{
-  position:absolute;left:0;right:0;bottom:-2px;
-  height:var(--nav-underline-h);
-  background:var(--brand);
+  position:   absolute; left: 0; right: 0; bottom: -2px;
+  height:     var(--nav-underline-h);
+  background: var(--brand);
 }
 
-/* ensure burger never shows at md+ even if markup changes */
-@media (min-width: 768px){
-  .mobile-burger{ display:none !important; }
+@media(min-width:768px){
+  .mobile-burger{ display: none !important; }
 }

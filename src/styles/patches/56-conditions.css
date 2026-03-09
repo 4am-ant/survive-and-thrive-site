@@ -1,0 +1,279 @@
+/* ── About The Conditions index ──────────────────────────────────────────── */
+
+.cond-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(1.5rem,3vw,2.5rem);
+  margin-top:clamp(1.5rem,3vw,2.5rem);
+  margin-bottom:clamp(1.5rem,3vw,2.5rem);
+}
+
+@media(max-width:680px){
+  .cond-grid{ grid-template-columns:1fr; }
+}
+
+.cond-card{
+  display:block;
+  background:var(--panel);
+  padding:clamp(1.25rem,2.5vw,2rem);
+  text-align:left;
+  text-decoration:none;
+  color:inherit;
+  box-shadow:none;
+  transition:box-shadow 0.2s ease;
+}
+
+.cond-card:hover{
+  box-shadow:0 4px 24px rgba(0,0,0,0.18);
+  color:inherit;
+}
+
+.cond-card .bf-heading{
+  margin-top:0;
+  gap:0;
+  align-items:flex-start;  /* text grows downward; wrapping extends below butterfly */
+  padding-bottom:1.25rem;
+}
+
+.cond-card .bf-heading__img{
+  width:clamp(140px,14vw,180px);
+}
+
+.cond-card .bf-heading__text{
+  font-size:clamp(1.4rem,2.2vw,2rem);
+  line-height:1.2;
+  padding-bottom:0;
+  margin-left:-2.5rem;                  /* slightly more overlap */
+  max-width:18rem;                      /* slightly wider column */
+  padding-top:clamp(80px,8vw,95px);   /* ~50% of butterfly height → text top starts at midpoint */
+}
+
+.cond-card p{
+  margin-bottom:1rem;
+}
+
+.cond-card__more{
+  color:var(--brand);
+  font-weight:600;
+}
+
+.cond-support-note{
+  text-align:center;
+  margin-top:0;
+}
+
+/* ── Individual condition post layout ────────────────────────────────────── */
+
+/*
+ * Wide:  body (left) + sidebar (right), share below body, support full-width
+ * Narrow: body → share → sidebar → support (stacked)
+ */
+.cond-post-layout{
+  display:grid;
+  grid-template-columns:1fr 240px;
+  grid-template-rows:auto auto auto;
+  grid-template-areas:
+    "body    sidebar"
+    "share   sidebar"
+    "support support";
+  gap:clamp(1.5rem,3vw,2rem) clamp(1.5rem,3vw,2.5rem);
+  margin-top:1.5rem;
+}
+
+@media(max-width:760px){
+  .cond-post-layout{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "body"
+      "share"
+      "sidebar"
+      "support";
+  }
+}
+
+.cond-post-body{
+  grid-area:body;
+  text-align:left;
+}
+
+.cond-post-body h2{
+  margin-top:0;
+}
+
+.cond-post-body p{
+  margin-bottom:0.9rem; /* Reduced by 40% from 1.5rem */
+}
+
+.cond-post-body ul{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Tighter gap when a list follows a paragraph (reduced by 80%) */
+.cond-post-body p + ul{
+  margin-top: -0.6rem; /* Offsets the paragraph's 0.9rem down to 0.3rem total */
+}
+
+.cond-post-body li{
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.4rem; /* Reduced from 0.75rem */
+  line-height: 1.5;
+}
+
+.cond-post-body li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 1rem;
+  height: 1rem;
+  background: url("/images/logo-butterfly.png") no-repeat center;
+  background-size: contain;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+
+.cond-post-sidebar{
+  grid-area:sidebar;
+  background:var(--panel);
+  padding:0; /* Remove panel padding to allow links to hit edges */
+  align-self:start;
+  text-align:left;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cond-post-sidebar h2{
+  font-size:1rem;
+  font-weight:700;
+  padding:1.25rem 1rem 0.5rem;
+  margin:0;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--brand);
+}
+
+.cond-post-sidebar ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:0; /* Vertical space handled by link padding */
+}
+
+.cond-sidebar-condition{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  padding: 0.85rem 1rem;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.cond-sidebar-condition:hover{
+  /* Shadow aligns with panel edges because link is full-width */
+  background-color: rgba(255, 255, 255, 0.3); /* Subtle lift without a solid white box */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+  z-index: 2; /* Ensure shadow overlaps adjacent items correctly */
+}
+
+.cond-post-sidebar .bf-heading{
+  gap:0;
+  align-items:flex-start;
+  padding-bottom:0;
+}
+
+.cond-post-sidebar .bf-heading__img{
+  width:clamp(60px,6vw,80px);
+}
+
+.cond-post-sidebar .bf-heading__text{
+  display:block;
+  font-size:clamp(0.85rem,1.2vw,1rem);
+  font-weight:600;
+  line-height:1.2;
+  padding-bottom:0;
+  margin-left:-1rem;
+  max-width:9rem;
+  padding-top:clamp(30px,3vw,40px);
+}
+
+/* ── Share section ───────────────────────────────────────────────────────── */
+
+.cond-post-share{
+  grid-area:share;
+  text-align:left;
+}
+
+.cond-post-share__label{
+  font-size:0.85rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--brand);
+  margin:0 0 0.6rem;
+}
+
+.cond-post-share__icons{
+  display:flex;
+  gap:0.5rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.cond-share-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--panel);
+  border:none;
+  color:var(--brand);
+  cursor:pointer;
+  text-decoration:none;
+  transition:background 0.2s ease, color 0.2s ease;
+  flex-shrink:0;
+  padding:0;
+}
+
+.cond-share-btn:hover,
+.cond-share-btn--copied{
+  background:var(--brand);
+  color:#fff;
+}
+
+.cond-share-btn svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
+
+/* ── For more support line ───────────────────────────────────────────────── */
+
+.cond-post-support{
+  grid-area:support;
+  text-align:center;
+  background: var(--panel);
+  padding: 2.5rem 2rem;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.cond-post-support p {
+  margin: 0;
+  max-width: 600px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}

@@ -1,12 +1,15 @@
-/* small padding at small screens, grows gently */
+/* ── Horizontal padding (applies at every width) ────────────────────────── */
 .container-pad{
-  padding-left:clamp(0.75rem, 2.5vw, 2rem);
-  padding-right:clamp(0.75rem, 2.5vw, 2rem);
+  padding-left:  clamp(0.75rem, 2.5vw, 2rem);
+  padding-right: clamp(0.75rem, 2.5vw, 2rem);
 }
 
-/* max width tuned between 7xl and 2xl */
+/* ── Content max-width — stepped to match original site container widths ── */
 .content-max{
-  max-width:86rem;
-  margin-left:auto;
-  margin-right:auto;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
+@media(min-width:1024px){ .content-max{ max-width: 984px;  } }
+@media(min-width:1280px){ .content-max{ max-width: 1160px; } }
+@media(min-width:1536px){ .content-max{ max-width: 1280px; } }

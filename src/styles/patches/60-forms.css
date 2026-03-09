@@ -1,0 +1,150 @@
+/* ── General page sections ─────────────────────────────────────────────────── */
+.page-section{
+  padding-top:2.5rem;
+  padding-bottom:3rem;
+}
+
+/* ── Form primitives ───────────────────────────────────────────────────────── */
+.form-field{
+  display:flex;
+  flex-direction:column;
+  gap:0.35rem;
+  margin-bottom:1.5rem;
+  position: relative;
+}
+
+/* ── Floating Label System ────────────────────────────────────────────────── */
+.form-field-float{
+  position: relative;
+  margin-bottom: 1.8rem;
+}
+
+.form-input-float{
+  width: 100%;
+  padding: 1.2rem 0.85rem 0.6rem;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #e0e0e0; /* paler grey bottom line */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+/* Labels for floating fields */
+.form-label-float{
+  position: absolute;
+  left: 0.85rem;
+  top: 1rem;
+  font-size: 1rem;
+  color: #999;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+/* Focus and filled states */
+.form-input-float:focus{
+  border: 1px solid #151515; /* dark full outline */
+}
+
+/* Shrink and move label on focus or when text is present */
+.form-input-float:focus + .form-label-float,
+.form-input-float:not(:placeholder-shown) + .form-label-float {
+  top: 0.25rem;
+  left: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Turn to brand color only on focus */
+.form-input-float:focus + .form-label-float {
+  color: var(--brand);
+}
+
+/* Standard textareas (User didn't explicitly ask for these to float, but we keep them clean) */
+.form-textarea{
+  width:100%;
+  padding:0.85rem;
+  border:1px solid #e0e0e0;
+  background:#fff;
+  color:var(--text);
+  font-size:0.95rem;
+  line-height:1.5;
+  transition:border-color 0.2s ease;
+}
+.form-textarea:focus{
+  outline:none;
+  border-color:#151515;
+}
+.form-textarea{
+  resize:vertical;
+  min-height:6rem;
+}
+
+.form-actions{
+  margin-top:1.25rem;
+}
+
+/* Status messages */
+.form-status{
+  margin-top:0.9rem;
+  font-size:0.9rem;
+  min-height:1.2em;
+}
+.form-status--ok { color:#1a7a1a; }
+.form-status--err{ color:#c0000a; }
+
+.form-error-inline{
+  color: #c0000a;
+  font-size: 1rem; /* slightly larger than form-status */
+  margin-top: 0.25rem;
+  min-height: 1.2em;
+  text-align: left; /* align with input text */
+  padding-left: 0.85rem; /* align with floating label/input padding */
+}
+
+/* ── Contact page layout ───────────────────────────────────────────────────── */
+.contact-layout{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:2.8rem;
+  max-width:800px; /* wider form */
+  margin: 0 auto;  /* centred */
+}
+
+/* Ensure the form itself takes full width of the layout */
+.contact-form-wrap{
+  width: 100%;
+}
+
+.contact-phone{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+  text-align: center; /* keep phone part centred too */
+  align-items: center;
+}
+.contact-phone .btn-primary{
+  align-self:center;
+}
+
+/* ── Privacy / policy page ─────────────────────────────────────────────────── */
+.policy-page h2{
+  margin-top:2rem;
+}
+.policy-meta{
+  font-size:0.85rem;
+  color:#666;
+  margin-bottom:1.5rem;
+}
+.policy-list{
+  list-style:disc;
+  padding-left:1.4rem;
+  line-height:1.9;
+  margin:0.5rem 0 1rem;
+}
+.policy-list li{
+  font-size:0.95rem;
+  color:var(--text);
+}

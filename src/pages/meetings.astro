@@ -1,0 +1,192 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Lightbox from "../components/Lightbox.astro";
+
+const mapsQuery = "Dove+Holes+Village+Hall,+Dove+Holes,+SK17+8BS";
+
+const photos = [
+  { src: "/images/site/dove-holes-village-hall.jpg", alt: "Dove Holes Village Hall exterior" },
+  { src: "/images/site/dvh-exterior.jpg",            alt: "Dove Holes Village Hall exterior evening" },
+  { src: "/images/site/dvh-entrance.jpg",            alt: "Dove Holes Village Hall entrance" },
+  { src: "/images/site/dvh-plaque.jpg",              alt: "Dove Holes Village Hall stone plaque" },
+  { src: "/images/site/dvh-kitchen.jpg",             alt: "Dove Holes Village Hall kitchen facilities" },
+];
+
+const calLeft = [
+  { date: "14th January",   type: "Coffee/Tea and chat" },
+  { date: "11th February",  type: "Fun Activity"        },
+  { date: "11th March",     type: "Guest Speaker"       },
+  { date: "8th April",      type: "Coffee/Tea and chat" },
+  { date: "13th May",       type: "Fun Activity & AGM"  },
+  { date: "10th June",      type: "Guest Speaker"       },
+];
+const calRight = [
+  { date: "8th July",       type: "Coffee/Tea and chat" },
+  { date: "12th August",    type: "Fun Activity"        },
+  { date: "9th September",  type: "Guest Speaker"       },
+  { date: "14th October",   type: "Fun Activity"        },
+  { date: "11th November",  type: "Coffee/Tea and chat" },
+  { date: "9th December",   type: "Guest Speaker"       },
+];
+
+// Determine if a date is in the past (based on 2026 calendar)
+const now = new Date();
+const currentYear = 2026;
+const monthMap: Record<string, number> = {
+  "January": 0, "February": 1, "March": 2, "April": 3, "May": 4, "June": 5,
+  "July": 6, "August": 7, "September": 8, "October": 9, "November": 10, "December": 11
+};
+
+const checkPast = (dateStr: string) => {
+  const parts = dateStr.split(" ");
+  const day = parseInt(parts[0]);
+  const month = monthMap[parts[1]];
+  // Create date for end of that day
+  const date = new Date(currentYear, month, day, 23, 59, 59);
+  return date < now;
+};
+---
+
+<MainLayout
+  title="Meetings – Survive and Thrive"
+  description="Find out when and where Survive and Thrive meets in Dove Holes, High Peak."
+>
+  <!-- SVG filter for rough card edges (hidden, used by CSS pseudo-element) -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+    <defs>
+      <filter id="mdcard-rough" x="-8%" y="-8%" width="116%" height="116%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="4" seed="7" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Intro text + address + directions -->
+  <section class="container-pad">
+    <div class="content-max">
+
+      <h1>Meetings</h1>
+
+      <div class="meetings-body">
+        <p>
+          Our group meets on the second Wednesday of each month at
+          <a href="https://www.doveholesvillagehall.co.uk/" target="_blank" rel="noopener noreferrer">Dove Holes Village Hall</a>.
+          The venue is fully wheelchair accessible, with wheelchair ramp access to the main entrance, modern toilet and accessible disabled facilities, and ample car parking directly outside the building.<br />
+          If you have any other access needs or questions, please <a href="/contact-us">contact us</a> and we will do our best to accommodate.
+        </p>
+
+        <h2>Our meetings are held at:</h2>
+        <address class="meetings-address">
+          <a href="https://www.doveholesvillagehall.co.uk/" target="_blank" rel="noopener noreferrer">Dove Holes Village Hall</a>,
+          Dove Holes, High Peak, SK17 8BS
+        </address>
+
+        <p class="meetings-directions">
+          <a
+            href={`https://www.google.com/maps/dir//${mapsQuery}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary"
+          ><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-left:0.5em;vertical-align:middle;flex-shrink:0"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Get Directions
+          </a>
+        </p>
+      </div>
+
+    </div><!-- /.content-max -->
+  </section>
+
+  <!-- Full-width regular map -->
+  <div class="meetings-map-full">
+    <iframe
+      title="Map showing Dove Holes Village Hall"
+      src={`https://maps.google.com/maps?q=${mapsQuery}&output=embed`}
+      width="100%" height="100%"
+      style="border:0;display:block;"
+      allowfullscreen loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+
+  <!-- Meeting dates card (below the map) -->
+  <section class="container-pad meetings-upcoming">
+    <div class="content-max">
+      <h1>Upcoming Dates</h1>
+      <div class="mdcard">
+        <img src="/images/logo.png" alt="Survive and Thrive" class="mdcard__logo-full" />
+        <h2 class="mdcard__title">Meeting Dates 2026</h2>
+        <p class="mdcard__meta">Second Wednesday of each month &middot; 11:30&nbsp;am&nbsp;&ndash;&nbsp;1:30&nbsp;pm</p>
+        <p class="mdcard__location">
+          <a href="https://www.doveholesvillagehall.co.uk/" target="_blank" rel="noopener noreferrer">
+            Dove Holes Village Hall
+          </a>
+        </p>
+        <div class="mdcard__dates">
+          <ul class="mdcard__col">
+            {calLeft.map(r => (
+              <li class={checkPast(r.date) ? "is-past" : ""}>
+                <strong>{r.date}</strong>
+                <span>{r.type}</span>
+              </li>
+            ))}
+          </ul>
+          <ul class="mdcard__col">
+            {calRight.map(r => (
+              <li class={checkPast(r.date) ? "is-past" : ""}>
+                <strong>{r.date}</strong>
+                <span>{r.type}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p class="mdcard__note"><strong>Events may be subject to change at short notice.</strong></p>
+      </div>
+    </div><!-- /.content-max -->
+  </section>
+
+
+
+  <!-- Venue photos -->
+  <section class="container-pad">
+    <div class="content-max">
+      <h1>Dove Holes Village Hall</h1>
+      <div class="meetings-photos">
+        {photos.map((p, i) => (
+          <figure class="meetings-photo">
+            <img
+              src={p.src}
+              alt={p.alt}
+              loading="lazy"
+              decoding="async"
+              data-gallery-index={i}
+              style="cursor:zoom-in"
+            />
+          </figure>
+        ))}
+      </div>
+      <!-- Street View -->  
+      <div class="meetings-sv-wrap">
+        <iframe
+          title="Street view near Dove Holes Village Hall"
+          src="https://www.google.com/maps/embed?pb=!4v1773022771440!6m8!1m7!1sZRzju-I_Zh2qpTJF7oRujQ!2m2!1d53.30231321186817!2d-1.885983473878594!3f103.11703875918677!4f-2.4956044057645244!5f1.0874441683769798"
+          width="100%" height="100%"
+          style="border:0;display:block;"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div><!-- /.content-max -->
+  </section>
+
+  <Lightbox id="meetings-lightbox" photos={photos} />
+</MainLayout>
+
+<script>
+  /* Thumbnail clicks on main page to trigger the shared Lightbox component */
+  document.querySelectorAll<HTMLImageElement>("img[data-gallery-index]").forEach(img => {
+    img.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("open-lightbox", {
+        detail: { id: "meetings-lightbox", index: Number(img.dataset.galleryIndex) }
+      }));
+    });
+  });
+</script>

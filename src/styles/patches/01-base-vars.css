@@ -1,16 +1,49 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   01-base-vars.css — Single source of truth for tokens and base resets
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root{
-  --brand:#8702a9;
-  --brand-hover:rgb(173,3,216);
-  --panel:#f8f0ff;
-  --bg:#ffffff;
-  --text:#111111;
-  --heading:#151515;
+  /* ── Brand colours ─────────────────────────────────────────────────────── */
+  --brand:          rgb(135, 2, 169);
+  --brand-hover:    rgb(173, 3, 216);
+
+  /* ── Page palette ──────────────────────────────────────────────────────── */
+  --bg:             #ffffff;
+  --panel:          #f8f0ff;
+  --text:           rgb(54, 54, 54);
+
+  /* ── Fonts ─────────────────────────────────────────────────────────────── */
+  --logo-font:    'Raleway', Arial, Helvetica, Roboto, sans-serif;
+  --primary-font: 'Quicksand', 'Nunito', 'Comfortaa', 'Arial Rounded MT Bold', sans-serif;
+
+  /* ── Section vertical spacing ───────────────────────────────────────────── */
+  --space-section: clamp(34px, 6vw, 70px);
 }
 
-html,body{background:var(--bg);color:var(--text);}
-body{
-  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
+/* ── Base ───────────────────────────────────────────────────────────────── */
+/* Quicksand is the site-wide default; Raleway used only for h3 (hero title) */
+html, body{
+  background:   var(--bg);
+  color:        var(--text);
+  font-family:  var(--primary-font);
+  font-weight:  400;
+  font-size:    16px;
+  line-height:  1.6;
+  text-align:   center;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-a{color:inherit;}
+
+a{
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+a:hover{ color: var(--brand-hover); }
+
+button, input, select, textarea{ font: inherit; }
+
+/* ── 1536px+: body text grows to 18px ──────────────────────────────────── */
+@media(min-width:1536px){
+  html, body{ font-size: 18px; }
+}

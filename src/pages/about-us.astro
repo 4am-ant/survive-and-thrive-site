@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Gallery from "../components/Gallery.astro";
+import Lightbox from "../components/Lightbox.astro";
 
 const imgGroup = "/images/site/img-20220525-wa0007-dc55b215.jpg";
 const imgCraft = "/images/site/20220302-125244-7f73674d.jpg";
@@ -21,18 +22,18 @@ const galleryItems = [
 <MainLayout title="About Us">
   <section class="container-pad">
     <div class="content-max">
-      <h1 class="page-h1">About Us</h1>
+      <h1>About Us</h1>
 
       <div class="au__grid">
         <figure class="au__img au__img--a">
           <img src={imgGroup} alt="Survive and Thrive members" loading="lazy" decoding="async" />
         </figure>
 
-        <p class="page-copy au__p--intro">
-          We are an independent, non-profit support group for people with Myalgic Encephalomyelitis, Fibromyalgia and other Post-Viral Fatigue Syndromes such as Long-Covid. Our group also supports the families and loved ones of those who suffer with these illnesses and welcome them to our meetings. Our group meets on two Wednesdays a month, once online and once in person at our fully accessible hub in Dove Holes in the High Peak. We also keep in-touch between meetings in our members only WhatsApp group.
+        <p class="au__p--intro">
+          We are an independent, non-profit support group for people with Myalgic Encephalomyelitis, Fibromyalgia and other Post-Viral Fatigue Syndromes such as Long-Covid. Our group also supports the families and loved ones of those who suffer with these illnesses and welcome them to our meetings. Our group meets on the second Wednesday of each month in person at Dove Holes Village Hall in the High Peak. We also keep in-touch between meetings in our members only WhatsApp group.
         </p>
 
-        <p class="page-copy au__p--vol">
+        <p class="au__p--vol">
           Survive and Thrive is ran by volunteers who themselves are affected by these illnesses. We regularly have a theme to our meetings and keep them a safe and up-beat experience for everyone. At our meetings, we discuss how we manage and cope with different aspects of our conditions, as well as having occasional guest speakers, crafting days and more. Throughout the year we host events to raise money for relevant charities, raise awareness of the conditions and celebrate festive periods.
         </p>
 
@@ -44,14 +45,14 @@ const galleryItems = [
           <img src={imgShoes} alt="Millions Missing awareness event" loading="lazy" decoding="async" />
         </figure>
 
-        <p class="page-copy au__p--support">
+        <p class="au__p--support">
           We also support recognised M.E events such as the
           <a href="https://meassociation.org.uk/2022/05/blue-sunday-tea-party/" rel="noreferrer" target="_blank">Blue Sunday Tea Party</a>
           and the
           <a href="https://www.meaction.net/countries/uk/millions-missing/" rel="noreferrer" target="_blank">Millions Missing Movement</a>.
         </p>
 
-        <p class="page-copy au__p--member">
+        <p class="au__p--member">
           To become a member you will be asked to fill out a membership form and pay a small yearly membership fee to support the group. We welcome members who are local to Buxton and the High Peak as we are a community based group. To become a member or get more information about our group, please <a href="/contact-us">contact us</a>.
         </p>
 
@@ -60,8 +61,10 @@ const galleryItems = [
         </figure>
       </div>
 
-      <h2 class="page-h1">Photo Gallery</h2>
-      <Gallery items={galleryItems} autoplayMs={4500} />
+      <h1>Photo Gallery</h1>
+      <Gallery items={galleryItems} autoplayMs={4500} lightboxId="about-gallery-lightbox" />
     </div>
   </section>
+
+  <Lightbox id="about-gallery-lightbox" photos={galleryItems} />
 </MainLayout>

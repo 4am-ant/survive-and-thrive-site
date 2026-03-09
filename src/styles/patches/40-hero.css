@@ -1,59 +1,34 @@
-.hero-panel{background:var(--panel);}
+/* ═══════════════════════════════════════════════════════════════════════════
+   40-hero.css — Hero section structure and panel padding
+   Typography (h1 kicker, h3 title, p subtitle) handled in 05-typography.css
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Image defines layout height (no crop, no distortion) */
+.hero-panel{ background: var(--panel); }
+
 .hero-image{
-  display:block;
-  width:100%;
-  height:auto !important;
-  object-fit:contain;
+  display: block;
+  width:   100%;
+  height:  auto !important;
+  object-fit: contain;
 }
 
-/* --- STACKED (mobile-first) --- */
-.hero-kicker{
-  font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif;
-  font-size:clamp(14px, 2.2vw, 18px) !important;
-  letter-spacing:0.22em;
-  text-transform:uppercase;
-  color:var(--brand);
+/* ── Panel internal padding ─────────────────────────────────────────────── */
+.hero-inner{
+  padding-inline: clamp(1.5rem, 4vw, 3rem);
+  padding-block:  clamp(2rem, 4.5vw, 4rem);
 }
 
-.hero-title{
-  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
-  font-weight:600;
-  line-height:1.08;
-  color:var(--heading);
-  font-size:clamp(40px, 6vw, 58px);
+@media(min-width:768px){
+  .hero-inner{
+    padding-inline: clamp(2rem, 3.2vw, 3.75rem);
+    padding-block:  clamp(2.25rem, 3.6vw, 4.25rem);
+  }
 }
 
-.hero-sub{
-  font-family:"Muli",ui-sans-serif,system-ui,sans-serif;
-  font-size:clamp(16px, 2.7vw, 22px) !important;
-  color:rgb(0 0 0 / .6);
-}
-
-/* --- SIDE-BY-SIDE (md+) --- */
-@media (min-width:768px){
-  .hero-panel{container-type:inline-size;}
-
-  @supports (container-type: inline-size) {
-    /* Make full-width side-by-side start large enough */
-    @container (min-width: 280px){
-      .hero-kicker{font-size:clamp(15px, 3.2cqi, 19px) !important;}
-      .hero-title{font-size:clamp(42px, 12.0cqi, 58px);}
-      .hero-sub{font-size:clamp(17px, 4.4cqi, 22px) !important;}
-    }
-
-    /* When panel is narrow, reduce padding + allow slightly smaller text */
-    @container (max-width: 420px){
-      .hero-inner{
-        padding-left:2.75rem !important;
-        padding-right:2.75rem !important;
-        padding-top:3.0rem !important;
-        padding-bottom:3.0rem !important;
-      }
-      .hero-kicker{font-size:clamp(13px, 3.0cqi, 16px) !important;}
-      .hero-title{font-size:clamp(36px, 10.5cqi, 48px);}
-      .hero-sub{font-size:clamp(14px, 4.0cqi, 19px) !important;}
-    }
+/* Narrow band: tighter padding when panel is 34.5% wide column */
+@media(min-width:768px) and (max-width:1020px){
+  .hero-inner{
+    padding-inline: clamp(1.25rem, 2.5vw, 2.5rem);
+    padding-block:  clamp(1.5rem, 2.6vw, 2.75rem);
   }
 }

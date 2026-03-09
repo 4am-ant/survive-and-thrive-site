@@ -3,7 +3,7 @@ import { items, isActive } from "./NavData";
 
 const { currentPath = "/" } = Astro.props;
 ---
-<ul class="navlist hidden items-center lg:flex">
+<ul class="navlist hidden items-center xl:flex">
   {items.map((it) => (
     <li>
       <a href={it.href} class="navlink">

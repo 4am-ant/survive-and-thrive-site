@@ -1,0 +1,66 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const conditions = [
+  { label: "ME Association",          href: "http://meassociation.org.uk" },
+  { label: "Action For ME",           href: "http://www.actionforme.org.uk" },
+  { label: "Fibromyalgia Action UK",  href: "https://www.fmauk.org" },
+  { label: "Lyme Disease UK",         href: "https://lymediseaseuk.com" },
+  { label: "Covid Aid",               href: "https://covidaidcharity.org" },
+  { label: "The Brain Charity",       href: "https://www.thebraincharity.org.uk/condition/chronic-fatigue-syndrome" },
+];
+
+const mentalHealth = [
+  { label: "Samaritans | Phone: 116 123",                               href: "https://www.samaritans.org" },
+  { label: "National Suicide Prevention Helpline UK | 0800 689 5652",   href: "https://www.spuk.org.uk" },
+  { label: "Mind (Mental Health Charity)",                               href: "https://www.mind.org.uk/information-support/guides-to-support-and-services/crisis-services/helplines-listening-services" },
+];
+---
+
+<MainLayout
+  title="Resources – Survive and Thrive"
+  description="Helpful links to charities and support organisations for M.E, CFS, Fibromyalgia, Long Covid and mental health."
+>
+  <section class="container-pad">
+    <div class="content-max">
+
+      <h1>Resources</h1>
+
+      <h2>Information</h2>
+
+      <div class="resources-intro">
+        <p>
+          There are many charities that provide more information about M.E, CFS, Fibromyalgia and other Post-Viral Fatigue conditions.
+          You can find the links to some of them below:
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        {conditions.map(r => (
+          <a href={r.href} target="_blank" rel="noopener noreferrer" class="btn-primary">{r.label}</a>
+        ))}
+      </div>
+
+      <h2>Mental Health</h2>
+
+      <div class="resources-intro">
+        <p>
+          Living with a chronic illness can have a detrimental effect on your mental health.
+          If you are in need of support, the charities below may be able to offer a helping hand.
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        {mentalHealth.map(r => (
+          <a href={r.href} target="_blank" rel="noopener noreferrer" class="btn-primary">{r.label}</a>
+        ))}
+      </div>
+
+      <div class="resources-warning">
+        <p><strong>Always contact your GP if you feel you may need medical help.</strong></p>
+        <p><strong>If you or someone you know requires urgent medical attention, call 999.</strong></p>
+      </div>
+
+    </div>
+  </section>
+</MainLayout>

@@ -7,6 +7,22 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"routes": [
+		{
+			"pattern": "surviveandthrivesupportgroup.com",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.surviveandthrivesupportgroup.com",
+			"custom_domain": true
+		}
+	],
+	"send_email": [
+		{
+			"name": "EMAIL",
+			"destination_address": "surviveandthrive@4amlabs.com"
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

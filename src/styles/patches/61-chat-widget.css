@@ -1,0 +1,99 @@
+/* ── Chat widget — floating button + slide-up panel (bottom-right) ─────────── */
+:root{
+  --chat-w:340px;
+  --chat-btn-size:62px;
+  --chat-gap:1.25rem;         /* gap from viewport edge */
+  --chat-z:900;
+}
+
+/* Toggle button */
+.chat-btn{
+  position:fixed;
+  right:var(--chat-gap);
+  bottom:var(--chat-gap);
+  z-index:var(--chat-z);
+
+  width:var(--chat-btn-size);
+  height:var(--chat-btn-size);
+  border-radius:50%;
+  border:none;
+  background:var(--brand);
+  color:#fff;
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:0 4px 16px rgba(135,2,169,0.35);
+  transition:background-color 0.2s ease, transform 0.2s ease;
+}
+.chat-btn:hover{
+  background:var(--brand-hover);
+  transform:scale(1.07);
+}
+.chat-btn__icon,
+.chat-btn__close{
+  width:28px;
+  height:28px;
+  position:absolute;
+  transition:opacity 0.2s ease, transform 0.2s ease;
+}
+/* default: show bubble, hide X */
+.chat-btn__icon { opacity:1; transform:scale(1); }
+.chat-btn__close{ opacity:0; transform:scale(0.5); }
+
+/* open state: swap icons */
+.chat-btn--open .chat-btn__icon { opacity:0; transform:scale(0.5); }
+.chat-btn--open .chat-btn__close{ opacity:1; transform:scale(1); }
+
+/* Panel */
+.chat-panel{
+  position:fixed;
+  right:var(--chat-gap);
+  bottom:calc(var(--chat-btn-size) + var(--chat-gap) + 0.5rem);
+  z-index:var(--chat-z);
+
+  width:var(--chat-w);
+  max-width:calc(100vw - 2 * var(--chat-gap));
+  max-height:80vh;
+  overflow-y:auto;
+
+  background:#fff;
+  border:1px solid rgba(135,2,169,0.15);
+  box-shadow:0 8px 32px rgba(0,0,0,0.14);
+
+  display:flex;
+  flex-direction:column;
+}
+.chat-panel[hidden]{ display:none; }
+
+.chat-panel__header{
+  background:var(--brand);
+  color:#fff;
+  padding:0.75rem 1rem;
+  font-weight:700;
+  font-size:0.9rem;
+  flex-shrink:0;
+}
+.chat-panel__title{ display:block; }
+
+.chat-form{
+  padding:1rem;
+}
+
+/* Compact Turnstile inside the widget */
+.chat-form .cf-turnstile{
+  transform:scale(0.9);
+  transform-origin:left center;
+  margin-top:0.5rem;
+}
+
+/* Tighten form fields slightly inside the widget */
+.chat-form .form-field{ margin-bottom:0.75rem; }
+.chat-form .form-textarea{ min-height:4.5rem; }
+
+@media (max-width:400px){
+  :root{ --chat-gap:0.75rem; }
+  .chat-panel{ --chat-w:calc(100vw - 2 * var(--chat-gap)); }
+}

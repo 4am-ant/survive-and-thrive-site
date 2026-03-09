@@ -1,5 +1,7 @@
+/* Inherits Quicksand 400 centre var(--text) from base */
+
 .site-footer{
-  padding-top: 56px;
+  padding-top:    56px;
   padding-bottom: 56px;
 }
 
@@ -7,12 +9,11 @@
   text-align: center;
 }
 
+/* Override: smaller size, tighter tracking than nav/button */
 .site-footer__copy{
-  font-family: var(--font-heading);
-  font-size: 14px;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.5);
+  font-size:      clamp(12px, 0.911vw, 14px); /* 12px at <1317px → 14px at 1536px */
+  letter-spacing: 0.083em;
 }
 
 .site-footer__links{
@@ -20,7 +21,7 @@
 }
 
 .site-footer__link{
-  font-size: 16px;
+  font-size:       14px;
   text-decoration: none;
 }
 

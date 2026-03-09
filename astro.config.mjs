@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
@@ -9,7 +9,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://surviveandthrivesupportgroup.com",
   integrations: [mdx(), sitemap()],
 
   adapter: cloudflare({
@@ -17,6 +17,10 @@ export default defineConfig({
           enabled: true,
       },
 	}),
+
+  image: {
+    service: passthroughImageService(),
+  },
 
   vite: {
     plugins: [tailwindcss()],

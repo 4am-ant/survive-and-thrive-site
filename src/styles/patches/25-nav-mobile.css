@@ -23,13 +23,6 @@
   border-radius:2px;
 }
 
-/* When nav is hidden (mobile), reduce the space before hero so it matches live better */
-@media (max-width: 767px){
-  .site-nav{
-    margin-bottom: clamp(14px, 3vw, 22px) !important;
-  }
-}
-
 /* Drawer overlay */
 .nav-dim{
   position:absolute;

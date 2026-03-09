@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import ChatWidget from "../components/ChatWidget.astro";
 
 const { title = "Survive and Thrive", description } = Astro.props;
 const currentPath = Astro.url.pathname;
@@ -14,15 +15,26 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Raleway:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Cloudflare Turnstile — loaded async on all pages (used by contact form + chat widget) -->
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
   </head>
 
   <body>
     <Nav currentPath={currentPath} logoSrc="/images/logo.png" siteName="Survive and Thrive" />
 
-    <main class="container-pad">
-      <div class="content-max">
-        <slot />
-      </div>
+    <main>
+      <slot />
     </main>
 
     <footer class="site-footer container-pad">
@@ -36,5 +48,8 @@ const year = new Date().getFullYear();
         </div>
       </div>
     </footer>
+
+    <!-- Floating chat widget — bottom-right on every page -->
+    <ChatWidget />
   </body>
 </html>

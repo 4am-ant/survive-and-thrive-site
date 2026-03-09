@@ -1,0 +1,33 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import ButterflyHeading from "../components/ButterflyHeading.astro";
+import { conditions, CONDITIONS_BASE } from "../data/conditions";
+---
+
+<MainLayout
+  title="About The Conditions – Survive and Thrive"
+  description="Learn about M.E/CFS, Fibromyalgia, Post-Viral Fatigue Syndrome and Long Covid."
+>
+  <section class="container-pad">
+    <div class="content-max">
+
+      <h1>About The Conditions</h1>
+
+      <div class="cond-grid">
+        {conditions.map(c => (
+          <a class="cond-card" href={`${CONDITIONS_BASE}/${c.slug}`}>
+            <ButterflyHeading tag="h2">{c.title}</ButterflyHeading>
+            <p>{c.body}</p>
+            <span class="cond-card__more">Continue reading</span>
+          </a>
+        ))}
+      </div>
+
+      <p class="cond-support-note">
+        For more support and more information on these conditions, please visit the
+        <a href="/resources">links on our resources page</a>.
+      </p>
+
+    </div>
+  </section>
+</MainLayout>

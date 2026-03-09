@@ -1,0 +1,27 @@
+---
+/**
+ * ButterflyHeading.astro — Decorative heading with butterfly logo.
+ *
+ * Props:
+ *  - tag: HTML heading element to render (default "h2")
+ *  - class: extra classes forwarded to the wrapper
+ *
+ * Usage:
+ *   <ButterflyHeading>Photo Gallery</ButterflyHeading>
+ *   <ButterflyHeading tag="h3">Join Us</ButterflyHeading>
+ */
+const { tag = "h2", class: className } = Astro.props;
+const Tag = tag;
+---
+
+<div class:list={["bf-heading", className]}>
+  <img
+    class="bf-heading__img"
+    src="/images/logo-butterfly.png"
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    decoding="async"
+  />
+  <Tag class="bf-heading__text"><slot /></Tag>
+</div>

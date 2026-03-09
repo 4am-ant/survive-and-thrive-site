@@ -1,0 +1,129 @@
+---
+// Floating chat / quick-contact widget — appears bottom-right on all pages.
+// Submits to the same /api/contact endpoint as the main contact form.
+const TURNSTILE_SITE_KEY = "0x4AAAAAACoB9MOG7IqLPQ6L";
+---
+
+<!-- Toggle button -->
+<button
+  id="chat-btn"
+  class="chat-btn"
+  aria-label="Send us a message"
+  aria-expanded="false"
+  aria-controls="chat-panel"
+>
+  <!-- Speech bubble icon — exactly as requested (tail moved left) -->
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="chat-btn__icon">
+    <path d="M22 3H2c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h3v5l9-4h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+  </svg>
+  <!-- X icon (shown when open) -->
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="chat-btn__close">
+    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  </svg>
+</button>
+
+<!-- Panel -->
+<div id="chat-panel" class="chat-panel" role="dialog" aria-label="Send us a message" aria-modal="true" hidden>
+  <div class="chat-panel__header">
+    <span class="chat-panel__title">Send us a message</span>
+  </div>
+
+  <form id="chat-form" class="chat-form" novalidate data-source="chat">
+    <div class="form-field">
+      <label for="chat-name" class="form-label">Name</label>
+      <input id="chat-name" name="name" type="text" class="form-input" autocomplete="name" />
+    </div>
+
+    <div class="form-field">
+      <label for="chat-email" class="form-label">
+        Email <span class="form-required" aria-hidden="true">*</span>
+      </label>
+      <input id="chat-email" name="email" type="email" class="form-input" required autocomplete="email" />
+    </div>
+
+    <div class="form-field">
+      <label for="chat-message" class="form-label">Message</label>
+      <textarea id="chat-message" name="message" class="form-textarea" rows="4"
+        placeholder="How can we help?"></textarea>
+    </div>
+
+    <input type="hidden" name="source" value="chat" />
+
+    <!-- Turnstile widget (compact size) -->
+    <div
+      class="cf-turnstile"
+      data-sitekey={TURNSTILE_SITE_KEY}
+      data-theme="light"
+      data-size="compact"
+    ></div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary chat-submit">Send</button>
+    </div>
+
+    <div id="chat-status" class="form-status" aria-live="polite"></div>
+  </form>
+</div>
+
+<script>
+  const btn   = document.getElementById("chat-btn")   as HTMLButtonElement | null;
+  const panel = document.getElementById("chat-panel") as HTMLElement | null;
+  const form  = document.getElementById("chat-form")  as HTMLFormElement | null;
+  const statusEl = document.getElementById("chat-status") as HTMLElement | null;
+
+  function openPanel() {
+    if (!panel || !btn) return;
+    panel.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    btn.classList.add("chat-btn--open");
+    panel.querySelector<HTMLInputElement>("#chat-name")?.focus();
+  }
+
+  function closePanel() {
+    if (!panel || !btn) return;
+    panel.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+    btn.classList.remove("chat-btn--open");
+  }
+
+  btn?.addEventListener("click", () => {
+    panel?.hidden ? openPanel() : closePanel();
+  });
+
+  // Close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !panel?.hidden) closePanel();
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form || !statusEl) return;
+
+    const submitBtn = form.querySelector<HTMLButtonElement>(".chat-submit");
+    if (submitBtn) submitBtn.disabled = true;
+    statusEl.textContent = "";
+    statusEl.className = "form-status";
+
+    try {
+      const res  = await fetch("/api/contact", { method: "POST", body: new FormData(form) });
+      const data = (await res.json()) as { success: boolean; error?: string };
+
+      if (data.success) {
+        statusEl.textContent = "Message sent — we'll be in touch soon!";
+        statusEl.classList.add("form-status--ok");
+        form.reset();
+        if (typeof (window as any).turnstile !== "undefined") {
+          (window as any).turnstile.reset();
+        }
+      } else {
+        statusEl.textContent = data.error ?? "Something went wrong. Please try again.";
+        statusEl.classList.add("form-status--err");
+      }
+    } catch {
+      statusEl.textContent = "Could not send. Please check your connection.";
+      statusEl.classList.add("form-status--err");
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+</script>
